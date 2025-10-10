@@ -11,7 +11,7 @@
     {
       "name": "base_map",
       "data": {
-        "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/ne_110m_admin_0_countries.topojson",
+        "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/ne_110m_admin_0_countries.topojson",
         "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
       },
       "mark": {"type":"geoshape", "fill":"#f2f2f2", "stroke":"#888", "strokeWidth":0.4}
@@ -20,7 +20,7 @@
     {
       "name": "data_map",
       "data": {
-        "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/ne_110m_admin_0_countries.topojson",
+        "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/ne_110m_admin_0_countries.topojson",
         "format": {"type":"topojson", "feature":"ne_110m_admin_0_countries"}
       },
       "transform": [

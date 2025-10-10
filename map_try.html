@@ -1,1 +1,28 @@
-<script>vegaEmbed('#vis','https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/women_in_stem_topo.json',{actions:false}).catch(console.error);</script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Vega Embed — Women in STEM Map</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>body{font-family:Arial,Helvetica,sans-serif;margin:12px;}#vis{max-width:1000px;margin:auto}</style>
+  <!-- REQUIRED: Vega + Vega-Lite + vega-embed (order matters) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <h2>Women in STEM — Map (Vega-Lite)</h2>
+
+  <!-- target container -->
+  <div id="vis"></div>
+
+  <!-- ONE LINE to embed the JSON spec -->
+  <script>
+    // Replace URL below with the raw URL where you saved the JSON spec
+    vegaEmbed('#vis',
+      'https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/women_in_stem_topo.json',
+      {actions: false, renderer: 'svg'}
+    ).catch(console.error);
+  </script>
+</body>
+</html>
