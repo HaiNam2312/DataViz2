@@ -1,58 +1,70 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Women in STEM — choropleth using ne_110m_admin_0_countries.topojson with year slider, field selector and centroid fallback.",
+  "description": "Women in STEM — choropleth for a fixed year (2023), aggregated across all fields, with tooltip showing mean enrollment, graduation rate and gender gap.",
   "width": 900,
   "height": 450,
-  "params": [
-    { "name": "yearParam", "value": 2020, "bind": {"input":"range","min":2000,"max":2023,"step":1} },
-    { "name": "fieldParam", "value": "All", "bind": {"input":"select","options":["All","Engineering","Mathematics","Computer Science","Biology"]} }
-  ],
   "layer": [
     {
       "name": "base_map",
       "data": {
         "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/ne_110m_admin_0_countries.topojson",
-        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
       },
-      "mark": {"type":"geoshape", "fill":"#f2f2f2", "stroke":"#888", "strokeWidth":0.4}
+      "mark": { "type": "geoshape", "fill": "#f2f2f2", "stroke": "#888", "strokeWidth": 0.4 }
     },
 
     {
       "name": "data_map",
       "data": {
         "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/ne_110m_admin_0_countries.topojson",
-        "format": {"type":"topojson", "feature":"ne_110m_admin_0_countries"}
+        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
       },
       "transform": [
+        { "calculate": "lower(trim(datum.properties && datum.properties.ADMIN))", "as": "admin_norm" },
         {
-          "lookup": "properties.ADMIN",
+          "lookup": "admin_norm",
           "from": {
             "data": {
               "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/women_in_stem.csv",
-              "format": {"type":"csv"},
+              "format": { "type": "csv" },
               "transform": [
                 {
-                  "calculate": "var c=(trim(datum.Country)||'').toLowerCase(); c==='usa'||c==='us'||c==='u.s.a.'||c==='united states' ? 'United States of America' : (c==='uk' ? 'United Kingdom' : (c==='aus'||c==='aust' ? 'Australia' : trim(datum.Country)))",
+                  "calculate": "var c = lower(trim(datum.Country)); (c==='usa'||c==='us'||c==='u.s.a.'||c==='united states') ? 'united states of america' : (c==='uk' ? 'united kingdom' : (c==='aus'||c==='aust' ? 'australia' : lower(trim(datum.Country))))",
                   "as": "CountryNorm"
                 },
-                {"filter":"toNumber(datum.Year) === yearParam && (fieldParam === 'All' || datum['STEM Fields'] === fieldParam)"},
-                {"calculate":"datum.CountryNorm","as":"Country"},
-                {"aggregate":[{"op":"mean","field":"Female Enrollment (%)","as":"meanEnroll"}],"groupby":["Country"]}
+                { "filter": "toNumber(datum.Year) === 2023" },
+                { "calculate": "datum.CountryNorm", "as": "CountryKey" },
+                {
+                  "aggregate": [
+                    { "op": "mean", "field": "Female Enrollment (%)", "as": "meanEnroll" },
+                    { "op": "mean", "field": "Female Graduation Rate (%)", "as": "meanGrad" },
+                    { "op": "mean", "field": "Gender Gap Index", "as": "meanGap" }
+                  ],
+                  "groupby": ["CountryKey"]
+                }
               ]
             },
-            "key": "Country",
-            "fields": ["meanEnroll"]
+            "key": "CountryKey",
+            "fields": ["meanEnroll", "meanGrad", "meanGap"]
           }
         },
-        {"calculate":"datum.meanEnroll === null ? null : datum.meanEnroll","as":"enrollment"},
-        {"filter":"datum.enrollment !== null"}
+        { "calculate": "datum.meanEnroll === null ? null : datum.meanEnroll", "as": "enrollment" },
+        { "calculate": "datum.meanGrad === null ? null : datum.meanGrad", "as": "graduation" },
+        { "calculate": "datum.meanGap === null ? null : datum.meanGap", "as": "gapIndex" }
       ],
-      "mark": {"type":"geoshape", "stroke":"#444", "strokeWidth":0.3},
+      "mark": { "type": "geoshape", "stroke": "#444", "strokeWidth": 0.3 },
       "encoding": {
-        "color": {"field":"enrollment","type":"quantitative","scale":{"scheme":"blues"},"title":"Female Enrollment (%)"},
+        "color": {
+          "field": "enrollment",
+          "type": "quantitative",
+          "scale": { "domain": [0, 100], "scheme": "blues" },
+          "title": "Female Enrollment (%)"
+        },
         "tooltip": [
-          {"field":"properties.ADMIN","type":"nominal","title":"Country"},
-          {"field":"enrollment","type":"quantitative","format":".2f","title":"Enrollment (%)"}
+          { "field": "properties.ADMIN", "type": "nominal", "title": "Country" },
+          { "field": "enrollment", "type": "quantitative", "format": ".2f", "title": "Enrollment (%)" },
+          { "field": "graduation", "type": "quantitative", "format": ".2f", "title": "Graduation Rate (%)" },
+          { "field": "gapIndex", "type": "quantitative", "format": ".2f", "title": "Gender Gap Index" }
         ]
       }
     },
@@ -61,45 +73,62 @@
       "name": "centroid_fallback",
       "data": {
         "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/countryInfo.csv",
-        "format": {"type":"csv"}
+        "format": { "type": "csv" }
       },
       "transform": [
+        { "calculate": "lower(trim(datum.name))", "as": "name_norm" },
         {
-          "lookup": "name",
+          "lookup": "name_norm",
           "from": {
             "data": {
               "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/women_in_stem.csv",
-              "format": {"type":"csv"},
+              "format": { "type": "csv" },
               "transform": [
                 {
-                  "calculate": "var c=(trim(datum.Country)||'').toLowerCase(); c==='usa'||c==='us'||c==='u.s.a.'||c==='united states' ? 'United States of America' : (c==='uk' ? 'United Kingdom' : (c==='aus'||c==='aust' ? 'Australia' : trim(datum.Country)))",
+                  "calculate": "var c = lower(trim(datum.Country)); (c==='usa'||c==='us'||c==='u.s.a.'||c==='united states') ? 'united states of america' : (c==='uk' ? 'united kingdom' : (c==='aus'||c==='aust' ? 'australia' : lower(trim(datum.Country))))",
                   "as": "CountryNorm"
                 },
-                {"filter":"toNumber(datum.Year) === yearParam && (fieldParam === 'All' || datum['STEM Fields'] === fieldParam)"},
-                {"calculate":"datum.CountryNorm","as":"Country"},
-                {"aggregate":[{"op":"mean","field":"Female Enrollment (%)","as":"meanEnroll"}],"groupby":["Country"]}
+                { "filter": "toNumber(datum.Year) === 2023" },
+                { "calculate": "datum.CountryNorm", "as": "CountryKey" },
+                {
+                  "aggregate": [
+                    { "op": "mean", "field": "Female Enrollment (%)", "as": "meanEnroll" },
+                    { "op": "mean", "field": "Female Graduation Rate (%)", "as": "meanGrad" },
+                    { "op": "mean", "field": "Gender Gap Index", "as": "meanGap" }
+                  ],
+                  "groupby": ["CountryKey"]
+                }
               ]
             },
-            "key": "Country",
-            "fields": ["meanEnroll"]
+            "key": "CountryKey",
+            "fields": ["meanEnroll", "meanGrad", "meanGap"]
           }
         },
-        {"calculate":"datum.meanEnroll === null ? null : datum.meanEnroll","as":"enrollment"},
-        {"filter":"datum.enrollment !== null"},
-        {"calculate":"toNumber(datum.longitude)","as":"lon"},
-        {"calculate":"toNumber(datum.latitude)","as":"lat"}
+        { "calculate": "datum.meanEnroll === null ? null : datum.meanEnroll", "as": "enrollment" },
+        { "calculate": "datum.meanGrad === null ? null : datum.meanGrad", "as": "graduation" },
+        { "calculate": "datum.meanGap === null ? null : datum.meanGap", "as": "gapIndex" },
+        { "filter": "datum.enrollment !== null" },
+        { "calculate": "toNumber(datum.longitude)", "as": "lon" },
+        { "calculate": "toNumber(datum.latitude)", "as": "lat" }
       ],
-      "mark": {"type":"circle","size":120,"stroke":"#222","strokeWidth":0.5},
+      "mark": { "type": "circle", "size": 120, "stroke": "#222", "strokeWidth": 0.5 },
       "encoding": {
-        "longitude": {"field":"lon","type":"quantitative"},
-        "latitude": {"field":"lat","type":"quantitative"},
-        "color": {"field":"enrollment","type":"quantitative","scale":{"scheme":"blues"},"legend":null},
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude": { "field": "lat", "type": "quantitative" },
+        "color": {
+          "field": "enrollment",
+          "type": "quantitative",
+          "scale": { "domain": [0, 100], "scheme": "blues" },
+          "legend": null
+        },
         "tooltip": [
-          {"field":"name","type":"nominal","title":"Country (centroid)"},
-          {"field":"enrollment","type":"quantitative","format":".2f","title":"Enrollment (%)"}
+          { "field": "name", "type": "nominal", "title": "Country (centroid)" },
+          { "field": "enrollment", "type": "quantitative", "format": ".2f", "title": "Enrollment (%)" },
+          { "field": "graduation", "type": "quantitative", "format": ".2f", "title": "Graduation Rate (%)" },
+          { "field": "gapIndex", "type": "quantitative", "format": ".2f", "title": "Gender Gap Index" }
         ]
       }
     }
   ],
-  "config": {"view": {"stroke":"transparent"}, "background":"#ffffff"}
+  "config": { "view": { "stroke": "transparent" }, "background": "#ffffff" }
 }
