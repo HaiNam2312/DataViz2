@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Vega-Lite from URL</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+
+  <script>
+
+    const SPEC_URL = "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/au_engagement_sex.json";
+
+    vegaEmbed("#vis", SPEC_URL, { mode: "vega-lite", renderer: "svg" })
+      .then(result => console.log("embed ok", result))
+      .catch(err => console.error("embed error", err));
+  </script>
+</body>
+</html>
