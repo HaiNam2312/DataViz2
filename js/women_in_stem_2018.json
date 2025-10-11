@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.8"></script>
-</head>
-<body>
-  <div id="vis"/>
-  <script>
-    const spec = {
+{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Women Enrollment Rate in STEM - 2020",
+  "title": "Women Enrollment Rate in STEM - 2018",
   "width": 800,
   "height": 400,
   "data": {
@@ -52,7 +42,7 @@
               "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/women_in_stem.csv",
               "format": {"type": "csv"},
               "transform": [
-                {"filter": "datum.Year == '2020'"},
+                {"filter": "datum.Year == '2018'"},
                 {"aggregate": [
                   {"op": "mean", "field": "Enrollment", "as": "Enrollment"},
                   {"op": "mean", "field": "GraduationRate", "as": "GraduationRate"},
@@ -111,8 +101,4 @@
     }
   ],
   "config": {}
-};
-    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
-  </script>
-</body>
-</html>
+}
