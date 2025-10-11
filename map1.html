@@ -10,7 +10,7 @@
   <script>
     const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "COVID-19 Active Cases (10 Oct 2020)",
+  "title": "Women in STEM",
   "width": 800,
   "height": 400,
   "data": {
@@ -49,36 +49,36 @@
           "lookup": "properties.NAME",
           "from": {
             "data": {
-              "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/3_choropleth_map/data/covid_10_10_2020.csv"
+              "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/women_in_stem.csv",
+              "format": {"type": "csv"},
+              "transform": [
+                {"filter": "datum.Year == '2018'"},
+                {"aggregate": [
+                  {"op": "mean", "field": "Enrollment", "as": "Enrollment"},
+                  {"op": "mean", "field": "GraduationRate", "as": "GraduationRate"},
+                  {"op": "mean", "field": "GenderGapIndex", "as": "GenderGapIndex"}
+                ], "groupby": ["Country"]}
+              ]
             },
             "key": "Country",
-            "fields": ["Active", "Confirmed", "Population"]
+            "fields": ["Enrollment", "GraduationRate", "GenderGapIndex"]
           }
         },
-        {
-          "calculate": "datum.Confirmed/datum.Population * 10000",
-          "as": "Confirmed per 10,000 population"
-        }
+        {"calculate": "toNumber(datum.Enrollment)", "as": "EnrollmentNum"}
       ],
       "mark": {"type": "geoshape", "stroke": "white"},
       "encoding": {
         "color": {
-          "field": "Confirmed per 10,000 population",
+          "field": "EnrollmentNum",
           "type": "quantitative",
-          "scale": {
-            "type": "threshold",
-            "domain": [1, 10, 100],
-            "range": ["#fdbe85", "#fd8d3c", "#e6550d", "#a63603"]
-          }
+          "scale": {"scheme": "blues"},
+          "legend": {"title": "Female Enrollment (%)"}
         },
         "tooltip": [
           {"field": "properties.NAME", "type": "nominal", "title": "Country"},
-          {"field": "Active", "type": "quantitative"},
-          {
-            "field": "Confirmed per 10,000 population",
-            "type": "quantitative",
-            "format": ".2f"
-          }
+          {"field": "EnrollmentNum", "type": "quantitative", "format": ".2f", "title": "Enrollment (%)"},
+          {"field": "GraduationRate", "type": "quantitative", "format": ".2f", "title": "Graduation Rate (%)"},
+          {"field": "GenderGapIndex", "type": "quantitative", "format": ".2f", "title": "Gender Gap Index"}
         ]
       }
     },
