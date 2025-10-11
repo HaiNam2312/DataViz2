@@ -1,4 +1,4 @@
-Country,Year,Female Enrollment (%),Female Graduation Rate (%),STEM Fields,Gender Gap Index
+Country,Year,Enrollment,GraduationRate,STEMFields,GenderGapIndex
 China,2018,20.4,43.2,Engineering,0.52
 China,2005,35.6,29.3,Mathematics,0.98
 China,2005,53.7,32.4,Biology,0.6
