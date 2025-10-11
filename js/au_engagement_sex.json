@@ -1,0 +1,46 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "15-24 Engagement in study/work — stacked by sex",
+  "data": {
+    "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/refs/heads/main/data/15_24_engage_work_study.csv",
+    "format": {"type": "csv"}
+  },
+  "width": 480,
+  "height": 320,
+  "transform": [
+    {"calculate": "datum['']", "as": "Sex"},
+    {
+      "fold": [
+        "Fully engaged (%)",
+        "Partially engaged (%)",
+        "Not engaged in study or employment (%)"
+      ],
+      "as": ["Engagement", "Percent"]
+    },
+    {"calculate": "toNumber(datum.Percent)", "as": "PercentNum"}
+  ],
+  "mark": {"type": "bar"},
+  "encoding": {
+    "x": {
+      "field": "Sex",
+      "type": "nominal",
+      "axis": {"labelAngle": 0, "title": ""}
+    },
+    "y": {
+      "field": "PercentNum",
+      "type": "quantitative",
+      "axis": {"title": "Percent (%)"},
+      "stack": "normalize"
+    },
+    "color": {
+      "field": "Engagement",
+      "type": "nominal",
+      "legend": {"title": "Engagement"}
+    },
+    "tooltip": [
+      {"field": "Sex", "type": "nominal"},
+      {"field": "Engagement", "type": "nominal"},
+      {"field": "PercentNum", "type": "quantitative", "format": ".1f", "title": "Percent"}
+    ]
+  }
+}
