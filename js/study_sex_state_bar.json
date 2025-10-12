@@ -1,0 +1,59 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Territory comparison — select Male / Female / Persons to compare study rates across Australian states/territories.",
+  "width": 620,
+  "height": 420,
+  "params": [
+    {
+      "name": "Sex",
+      "value": "Female",
+      "bind": {
+        "input": "select",
+        "options": ["Male", "Female", "Persons"],
+        "labels": ["Male", "Female", "Persons"]
+      }
+    }
+  ],
+  "data": {
+    "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/study_sex_territory.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {"calculate": "datum['']", "as": "Territory"},
+    {
+      "fold": ["Male (%)", "Female (%)", "Persons (%)"],
+      "as": ["SexKey", "Percent"]
+    },
+    {"calculate": "toNumber(datum.Percent)", "as": "PercentNum"},
+    {
+      "filter": "lower(trim(datum.SexKey || '')) == lower(Sex + ' (%)') || lower(trim(datum.SexKey || '')) == lower(Sex)"
+    }
+  ],
+  "mark": {"type": "bar"},
+  "encoding": {
+    "y": {
+      "field": "Territory",
+      "type": "ordinal",
+      "sort": {"field": "PercentNum", "order": "descending"},
+      "axis": {"title": ""}
+    },
+    "x": {
+      "field": "PercentNum",
+      "type": "quantitative",
+      "axis": {"title": "Percent (%)"},
+      "scale": {"domain": [0, 100]}
+    },
+    "color": {
+      "field": "SexKey",
+      "type": "nominal",
+      "legend": null,
+      "scale": {"scheme": "tableau10"}
+    },
+    "tooltip": [
+      {"field": "Territory", "type": "nominal", "title": "Territory"},
+      {"field": "SexKey", "type": "nominal", "title": "Sex"},
+      {"field": "PercentNum", "type": "quantitative", "format": ".1f", "title": "Percent (%)"}
+    ]
+  },
+  "config": {"view": {"stroke": "transparent"}}
+}

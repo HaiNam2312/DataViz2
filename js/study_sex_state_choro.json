@@ -1,0 +1,70 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 600,
+  "height": 500,
+  "title": "Rate of Study Engagement by Sex and State/Territory",
+  "params": [
+    {
+      "name": "sex",
+      "value": "Female (%)",
+      "bind": {
+        "input": "select",
+        "options": ["Male (%)", "Female (%)", "Persons (%)"],
+        "labels": ["Male", "Female", "Persons"],
+        "name": "Sex: "
+      }
+    }
+  ],
+  "data": {
+    "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+    "format": { "type": "json" }
+  },
+  "transform": [
+    {
+      "lookup": "STATE_NAME",
+      "from": {
+        "data": {
+          "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/study_sex_territory.csv"
+        },
+        "key": "State",
+        "fields": ["Male (%)", "Female (%)", "Persons (%)"]
+      }
+    },
+    {
+      "calculate": "toNumber(datum[sex])",
+      "as": "rate"
+    }
+  ],
+  "projection": {
+    "type": "mercator"
+  },
+  "mark": {
+    "type": "geoshape",
+    "stroke": "white"
+  },
+  "encoding": {
+    "color": {
+      "field": "rate",
+      "type": "quantitative",
+      "title": "Rate (%)",
+      "scale": {
+        "scheme": "blues",
+        "domain": [14, 20],
+        "type": "quantize",
+        "rangeStep": 7
+      },
+      "legend": {
+        "title": "Rate (%)",
+        "type": "symbol",
+        "labelOverlap": false,
+        "values": [14, 15, 16, 17, 18, 19, 20]
+      }
+    },
+    "tooltip": [
+      {"field": "STATE_NAME", "type": "nominal", "title": "State/Territory"},
+      {"field": "Male (%)", "type": "quantitative"},
+      {"field": "Female (%)", "type": "quantitative"},
+      {"field": "Persons (%)", "type": "quantitative"}
+    ]
+  }
+}
