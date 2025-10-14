@@ -1,0 +1,43 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {"text": "Rate of Study Engagement by State/Territory (Australia) — Persons (%)", "anchor": "start"},
+  "width": 800,
+  "height": 520,
+  "projection": {"type": "mercator"},
+  "data": {
+    "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+    "format": {"type": "json", "property": "features"}
+  },
+  "transform": [
+    {
+      "calculate": "datum.properties.STATE_NAME",
+      "as": "StateKey"
+    },
+    {
+      "lookup": "StateKey",
+      "from": {
+        "data": {
+          "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/refs/heads/main/data/study_sex_territory.csv",
+          "format": {"type": "csv"}
+        },
+        "key": "State",
+        "fields": ["Male", "Female", "Persons"]
+      }
+    }
+  ],
+  "mark": {"type": "geoshape", "stroke": "white"},
+  "encoding": {
+    "color": {
+      "field": "Female",
+      "type": "quantitative",
+      "scale": {"scheme": "blues"},
+      "legend": {"title": "Female (%)"}
+    },
+    "tooltip": [
+      {"field": "StateKey", "type": "nominal", "title": "State/Territory"},
+      {"field": "Male", "type": "quantitative", "format": ".1f", "title": "Male (%)"},
+      {"field": "Female", "type": "quantitative", "format": ".1f", "title": "Female (%)"},
+      {"field": "Persons", "type": "quantitative", "format": ".1f", "title": "Persons (%)"}
+    ]
+  }
+}
