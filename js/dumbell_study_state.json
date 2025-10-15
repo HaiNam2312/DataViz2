@@ -1,0 +1,80 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Male vs Female Study Engagement — Slope chart by State (Persons used to sort)",
+  "width": 900,
+  "height": 520,
+  "data": {
+    "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/study_sex_territory.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {"calculate": "toNumber(datum['Male'])", "as": "Male"},
+    {"calculate": "toNumber(datum['Female'])", "as": "Female"},
+    {"calculate": "toNumber(datum['Persons'])", "as": "Persons"}
+  ],
+  "encoding": {
+    "y": {
+      "field": "State",
+      "type": "nominal",
+      "sort": {"field": "Persons", "op": "max", "order": "descending"},
+      "axis": {"labelLimit": 250, "title": null}
+    }
+  },
+  "layer": [
+    {
+      "description": "lines connecting Male and Female",
+      "mark": {"type": "rule", "strokeWidth": 2, "opacity": 0.7},
+      "encoding": {
+        "x": {"field": "Male", "type": "quantitative"},
+        "x2": {"field": "Female"},
+        "tooltip": [
+          {"field": "State", "type": "nominal", "title": "State/Territory"},
+          {"field": "Male", "type": "quantitative", "title": "Male (%)", "format": ".1f"},
+          {"field": "Female", "type": "quantitative", "title": "Female (%)", "format": ".1f"},
+          {"field": "Persons", "type": "quantitative", "title": "Persons (%)", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "description": "points for Male / Female",
+      "transform": [
+        {"fold": ["Male", "Female"], "as": ["Sex", "Value"]}
+      ],
+      "mark": {"type": "point", "filled": true, "size": 120, "stroke": "white"},
+      "encoding": {
+        "x": {"field": "Value", "type": "quantitative", "axis": {"title": "Rate (%)"}},
+        "color": {
+          "field": "Sex",
+          "type": "nominal",
+          "scale": {"domain": ["Male", "Female"], "range": ["#4C78A8", "#F58518"]},
+          "legend": {"title": "Sex", "orient": "top-right"}
+        },
+        "tooltip": [
+          {"field": "State", "type": "nominal", "title": "State/Territory"},
+          {"field": "Sex", "type": "nominal", "title": "Series"},
+          {"field": "Value", "type": "quantitative", "title": "Rate (%)", "format": ".1f"},
+          {"field": "Persons", "type": "quantitative", "title": "Persons (%)", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "description": "value labels for points",
+      "transform": [
+        {"fold": ["Male", "Female"], "as": ["Sex", "Value"]}
+      ],
+      "mark": {"type": "text", "dx": 6, "dy": -6, "fontSize": 11},
+      "encoding": {
+        "x": {"field": "Value", "type": "quantitative"},
+        "text": {"field": "Value", "type": "quantitative", "format": ".1f"},
+        "opacity": {"value": 0.9},
+        "y": {"field": "State", "type": "nominal"},
+        "detail": {"field": "Sex"}
+      }
+    }
+  ],
+  "config": {
+    "view": {"stroke": "transparent"},
+    "axis": {"labelFontSize": 12, "titleFontSize": 13},
+    "legend": {"labelFontSize": 11, "titleFontSize": 12}
+  }
+}

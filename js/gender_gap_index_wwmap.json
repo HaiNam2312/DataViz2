@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Women Enrollment Rate in STEM - 2020",
+  "title": "Male and Female Gender Gap Index",
   "width": 800,
   "height": 400,
   "data": {
@@ -45,28 +45,28 @@
                 {"filter": "datum.Year == '2020'"},
                 {"aggregate": [
                   {"op": "mean", "field": "Enrollment", "as": "Enrollment"},
-                  {"op": "mean", "field": "GraduationRate", "as": "GraduationRate"}
+                  {"op": "mean", "field": "GraduationRate", "as": "GraduationRate"},
+                  {"op": "mean", "field": "GenderGapIndex", "as": "GenderGapIndex"}
                 ], "groupby": ["Country"]}
               ]
             },
             "key": "Country",
-            "fields": ["Enrollment", "GraduationRate", "GenderGapIndex"]
+            "fields": ["Enrollment", "GraduationRate", "GenderGapIndex","Year"]
           }
         },
-        {"calculate": "toNumber(datum.Enrollment)", "as": "EnrollmentNum"}
+        {"calculate": "toNumber(datum.Enrollment)", "as": "EnrollmentNum"},
+        {"calculate": "toNumber(datum.GenderGapIndex)", "as": "GenderGapIndexNum"}
       ],
       "mark": {"type": "geoshape", "stroke": "white"},
       "encoding": {
         "color": {
-          "field": "EnrollmentNum",
+          "field": "GenderGapIndexNum",
           "type": "quantitative",
-          "scale": {"scheme": "blues"},
-          "legend": {"title": "Female Enrollment (%)"}
+          "scale": {"scheme": "reds"},
+          "legend": {"title": "Gender Gap Index"}
         },
         "tooltip": [
           {"field": "properties.NAME", "type": "nominal", "title": "Country"},
-          {"field": "EnrollmentNum", "type": "quantitative", "format": ".2f", "title": "Enrollment (%)"},
-          {"field": "GraduationRate", "type": "quantitative", "format": ".2f", "title": "Graduation Rate (%)"},
           {"field": "GenderGapIndex", "type": "quantitative", "format": ".2f", "title": "Gender Gap Index"}
         ]
       }
