@@ -1,62 +1,55 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Fully working/studying by age and sex (Australia) — grouped bars",
-  "title": "Fully engaged in work/study — by age group & sex (Australia)",
+  "title": {"text": "Field of Study by Sex (%)", "anchor": "start"},
   "width": 760,
-  "height": 380,
+  "height": {"step": 28},
   "data": {
-    "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/field_sex.csv",
+    "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/refs/heads/main/data/field_of_study_sex.csv",
     "format": {"type": "csv"}
   },
-  "transform": [
-    {"calculate": "datum['Field']", "as": "Field"},
+  "layer": [
     {
-      "fold": ["Male", "Female", "Persons"],
-      "as": ["Sex", "Percent"]
-    },
-    {"calculate": "toNumber(datum.Percent)", "as": "PercentNum"}
-  ],
-  "mark": {"type": "bar", "tooltip": true},
-  "encoding": {
-    "x": {
-      "field": "Age",
-      "type": "ordinal",
-      "axis": {"title": "Age group", "labelAngle": 0},
-      "scale": {
-        "domain": [
-          "15-19",
-          "20-24",
-          "25-29",
-          "30-34",
-          "35-39",
-          "40-44",
-          "45-49",
-          "50-54",
-          "55-59",
-          "60-64",
-          "65-74",
-          "Total (15-74)"
+      "transform": [{"fold": ["Male", "Female"], "as": ["Sex", "Value"]}],
+      "mark": {"type": "bar", "cornerRadiusEnd": 2},
+      "encoding": {
+        "y": {
+          "field": "Field",
+          "type": "nominal",
+          "sort": {"field": "Persons", "order": "descending"},
+          "title": "",
+          "axis": {"labelLimit": 380}
+        },
+        "yOffset": {"field": "Sex"},
+        "x": {
+          "field": "Value",
+          "type": "quantitative",
+          "title": "Percentage (%)",
+          "axis": {"format": ".1f"}
+        },
+        "color": {"field": "Sex", "type": "nominal", "title": "Sex", "scale": {"scheme": "set2"}},
+        "tooltip": [
+          {"field": "Field", "title": "Field"},
+          {"field": "Sex", "title": "Sex"},
+          {"field": "Value", "type": "quantitative", "format": ".1f", "title": "Value (%)"}
         ]
       }
     },
-    "xOffset": {"field": "Sex"},
-    "y": {
-      "field": "PercentNum",
-      "type": "quantitative",
-      "axis": {"title": "Percent (%)"},
-      "scale": {"domain": [0, 100]}
-    },
-    "color": {
-      "field": "Sex",
-      "type": "nominal",
-      "legend": {"title": "Sex"},
-      "scale": {"scheme": "tableau10"}
-    },
-    "tooltip": [
-      {"field": "Age", "type": "nominal", "title": "Age group"},
-      {"field": "Sex", "type": "nominal"},
-      {"field": "PercentNum", "type": "quantitative", "format": ".1f", "title": "Percent (%)"}
-    ]
-  },
-  "config": {"view": {"stroke": "transparent"}}
+    {
+      "transform": [{ "fold": ["Male", "Female"], "as": ["Sex", "_"] }],
+      "mark": {"type": "tick", "size": 22, "thickness": 2, "color": "black"},
+      "encoding": {
+        "y": {"field": "Field", "type": "nominal"},
+        "xOffset": {"field": "Sex"},          
+        "x": {"field": "Persons", "type": "quantitative"},
+        "tooltip": [
+          {"field": "Field", "title": "Field"},
+          {"field": "Persons", "type": "quantitative", "format": ".1f", "title": "Persons (%)"}
+        ]
+      }
+    }
+  ],
+  "config": {
+    "view": {"stroke": null},
+    "legend": {"labelFontSize": 11, "titleFontSize": 12}
+  }
 }
