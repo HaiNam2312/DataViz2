@@ -21,7 +21,7 @@
   "transform": [
     {"calculate": "datum['']", "as": "Territory"},
     {
-      "fold": ["Male (%)", "Female (%)", "Persons (%)"],
+      "fold": ["Male", "Female", "Persons"],
       "as": ["SexKey", "Percent"]
     },
     {"calculate": "toNumber(datum.Percent)", "as": "PercentNum"},
