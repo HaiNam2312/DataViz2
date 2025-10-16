@@ -14,6 +14,7 @@
   <div id="ggi"></div>
   <div id="wis"></div>
   <div id="sssc"></div>
+  <div id="field"></div>
 
   <script>
 
@@ -35,6 +36,9 @@
       .then(result => console.log("embed ok", result))
       .catch(err => console.error("embed error", err));
     vegaEmbed("#sssc", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/study_sex_state_choro_f.json", { mode: "vega-lite", renderer: "svg" })
+      .then(result => console.log("embed ok", result))
+      .catch(err => console.error("embed error", err));
+    vegaEmbed("#field", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/field_sex.json", { mode: "vega-lite", renderer: "svg" })
       .then(result => console.log("embed ok", result))
       .catch(err => console.error("embed error", err));
 

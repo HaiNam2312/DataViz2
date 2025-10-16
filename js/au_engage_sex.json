@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "15-24 Engagement in study/work — stacked by sex",
-  "title": "15-24 Engagement in study/work — stacked by sex",
+  "title": "15-24 Engagement in study/work by sex",
   "data": {
     "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/refs/heads/main/data/15_24_engage_work_study.csv",
     "format": {"type": "csv"}
