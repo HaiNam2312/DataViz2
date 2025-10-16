@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Women Enrollment Rate in STEM - 2020",
+  "title": "Women Enrollment Rate in STEM by Country (2020)",
   "width": 800,
   "height": 400,
   "data": {

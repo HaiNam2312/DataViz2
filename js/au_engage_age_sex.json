@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Fully working/studying by age and sex (Australia) — grouped bars",
-  "title": "Fully engaged in work/study — by age group & sex (Australia)",
+  "title": "Fully engaged in work/study by age group & sex in Australia",
   "width": 760,
   "height": 380,
   "data": {

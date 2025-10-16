@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Male vs Female Study Engagement — Slope chart by State (Persons used to sort)",
+  "title": "Male vs Female Study Engagement by State/Territory (Australia)",
   "width": 900,
   "height": 520,
   "data": {

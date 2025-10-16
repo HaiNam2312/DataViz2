@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {"text": "Field of Study by Sex (%)", "anchor": "start"},
+  "title": {"text": "Field of Current Study In Australia", "anchor": "start"},
   "width": 760,
   "height": {"step": 28},
   "data": {

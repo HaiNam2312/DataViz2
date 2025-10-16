@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {"text": "Rate of Study Engagement by State/Territory (Australia) — Persons (%)", "anchor": "start"},
+  "title": {"text": "Rate of Study Engagement of Female by State/Territory ", "anchor": "start"},
   "width": 800,
   "height": 520,
   "projection": {"type": "mercator"},
