@@ -1,0 +1,62 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Fully working/studying by age and sex (Australia) — grouped bars",
+  "title": "Fully engaged in work/study — by age group & sex (Australia)",
+  "width": 760,
+  "height": 380,
+  "data": {
+    "url": "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/data/field_sex.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {"calculate": "datum['Field']", "as": "Field"},
+    {
+      "fold": ["Male", "Female", "Persons"],
+      "as": ["Sex", "Percent"]
+    },
+    {"calculate": "toNumber(datum.Percent)", "as": "PercentNum"}
+  ],
+  "mark": {"type": "bar", "tooltip": true},
+  "encoding": {
+    "x": {
+      "field": "Age",
+      "type": "ordinal",
+      "axis": {"title": "Age group", "labelAngle": 0},
+      "scale": {
+        "domain": [
+          "15-19",
+          "20-24",
+          "25-29",
+          "30-34",
+          "35-39",
+          "40-44",
+          "45-49",
+          "50-54",
+          "55-59",
+          "60-64",
+          "65-74",
+          "Total (15-74)"
+        ]
+      }
+    },
+    "xOffset": {"field": "Sex"},
+    "y": {
+      "field": "PercentNum",
+      "type": "quantitative",
+      "axis": {"title": "Percent (%)"},
+      "scale": {"domain": [0, 100]}
+    },
+    "color": {
+      "field": "Sex",
+      "type": "nominal",
+      "legend": {"title": "Sex"},
+      "scale": {"scheme": "tableau10"}
+    },
+    "tooltip": [
+      {"field": "Age", "type": "nominal", "title": "Age group"},
+      {"field": "Sex", "type": "nominal"},
+      {"field": "PercentNum", "type": "quantitative", "format": ".1f", "title": "Percent (%)"}
+    ]
+  },
+  "config": {"view": {"stroke": "transparent"}}
+}
