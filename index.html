@@ -11,59 +11,178 @@
 
   <!-- Minimal, readable styling -->
   <style>
-    :root{
-      --fg:#0f172a; --muted:#64748b; --border:#e2e8f0; --card:#ffffff; --maxw:1100px;
-    }
-    html,body{margin:0;padding:0;background:#fafafa;color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;line-height:1.55}
-    header{border-bottom:1px solid var(--border);background:#fff}
-    header .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 16px}
-    h1{margin:0 0 6px;font-size:28px}
-    .sub{margin:0;color:var(--muted)}
-
-    /* Layout: cards have even width; text never affects width */
-    main{
-      max-width:var(--maxw);
-      margin:0 auto;
-      padding:18px 16px;
-      display:grid;
-      gap:22px;
-    }
-    .grid-2{
-      display:grid;
-      gap:22px;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); /* even card widths */
-    }
-    section.card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:16px 16px 12px;
-      display:flex;
-      flex-direction:column;
-      inline-size:100%;
-      overflow:hidden;
-    }
-    /* Option A: make selected cards span full width */
-    .card.wide{ grid-column: 1 / -1; }
-
-    /* Ensure embedded SVG charts scale to container */
-    .vega-embed svg{ width:100% !important; height:auto !important; }
-
-    section.card h2{margin:4px 0 6px;font-size:20px}
-    figure{margin:8px 0 0}
-    figcaption{font-size:13px;color:var(--muted);margin-top:8px}
-
-    /* Text wraps; long lines won’t stretch cards */
-    p.context{
-      margin:10px 0 0;
-      color:#334155;
-      overflow-wrap:anywhere;
-      word-break:normal;
-      hyphens:auto;
-    }
-
-    footer{max-width:var(--maxw);margin:0 auto;padding:20px 16px 40px;color:var(--muted)}
-    a{color:#0ea5e9;text-decoration:none} a:hover{text-decoration:underline}
+  :root {
+    --bg1: #0b1020;
+    --bg2: #111827;
+  
+    --card: rgba(255,255,255,0.06);
+    --card-hover: rgba(255,255,255,0.09);
+  
+    --border: rgba(255,255,255,0.12);
+  
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+  
+    --accent: #60a5fa;
+    --good: #34d399;
+    --warn: #fbbf24;
+  
+    --maxw: 1100px;
+  }
+  
+  /* BASE */
+  html, body {
+    margin: 0;
+    padding: 0;
+  
+    background: radial-gradient(circle at top, #1f2937, var(--bg1));
+    color: var(--text);
+  
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  
+  /* subtle animated glow background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(96,165,250,0.12), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(168,85,247,0.10), transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(34,211,238,0.08), transparent 50%);
+    z-index: -1;
+  }
+  
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+  }
+  
+  header .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 28px 16px;
+  }
+  
+  h1 {
+    margin: 0 0 6px;
+    font-size: 34px;
+    letter-spacing: -0.5px;
+  }
+  
+  .sub {
+    margin: 0;
+    color: var(--muted);
+  }
+  
+  /* MAIN LAYOUT */
+  main {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 24px 16px;
+  
+    display: grid;
+    gap: 22px;
+  }
+  
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  }
+  
+  /* CARD */
+  section.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  
+    padding: 18px 18px 14px;
+  
+    display: flex;
+    flex-direction: column;
+  
+    overflow: hidden;
+  
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  
+  section.card:hover {
+    transform: translateY(-4px);
+    background: var(--card-hover);
+  }
+  
+  /* FULL WIDTH CARDS */
+  .card.wide {
+    grid-column: 1 / -1;
+  }
+  
+  /* TITLES */
+  section.card h2 {
+    margin: 4px 0 10px;
+    font-size: 20px;
+    color: var(--accent);
+    letter-spacing: -0.3px;
+  }
+  
+  /* FIGURE */
+  figure {
+    margin: 8px 0 0;
+  }
+  
+  /* caption (subtle, not academic) */
+  figcaption {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    opacity: 0.8;
+  }
+  
+  /* CONTEXT TEXT (IMPORTANT FIX) */
+  p.context {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+  
+  /* VEGAS CHART FIX */
+  .vega-embed svg {
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* FOOTER */
+  footer {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 30px 16px 50px;
+  
+    color: var(--muted);
+    font-size: 13px;
+    opacity: 0.8;
+  }
+  
+  /* LINKS */
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
   </style>
 </head>
 <body>
