@@ -13,6 +13,7 @@
   <style>
   :root {
     --bg1: #0b1020;
+    --bg2: #111827;
   
     --card: rgba(255,255,255,0.06);
     --card-hover: rgba(255,255,255,0.09);
@@ -23,6 +24,8 @@
     --muted: #94a3b8;
   
     --accent: #60a5fa;
+    --good: #34d399;
+    --warn: #fbbf24;
   
     --maxw: 1100px;
   }
@@ -38,10 +41,9 @@
   
     background: #0b1020;
     scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
   }
   
-  /* MULTI-LAYER GRADIENT (FIX BLUE ISSUE) */
+  /* MAIN GRADIENT LAYER */
   body::before {
     content: "";
     position: fixed;
@@ -49,16 +51,16 @@
     z-index: -1;
   
     background:
-      radial-gradient(circle at 15% 20%, rgba(96,165,250,0.22), transparent 40%),
-      radial-gradient(circle at 80% 30%, rgba(168,85,247,0.18), transparent 45%),
-      radial-gradient(circle at 50% 80%, rgba(34,211,238,0.12), transparent 50%),
+      radial-gradient(circle at 15% 20%, rgba(96,165,250,0.25), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(168,85,247,0.20), transparent 45%),
+      radial-gradient(circle at 50% 80%, rgba(34,211,238,0.15), transparent 50%),
       linear-gradient(to bottom, #0b1020, #070a14);
   }
   
   /* HEADER */
   header {
     border-bottom: 1px solid var(--border);
-    background: rgba(0,0,0,0.25);
+    background: rgba(0,0,0,0.2);
     backdrop-filter: blur(10px);
   }
   
@@ -79,38 +81,35 @@
     color: var(--muted);
   }
   
-  /* MAIN → IMPORTANT CHANGE */
+  /* MAIN LAYOUT */
   main {
     max-width: var(--maxw);
     margin: 0 auto;
     padding: 24px 16px;
   
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
+    display: grid;
+    gap: 22px;
   }
   
-  /* GRID (keep but not used for snap sections) */
+  /* GRID */
   .grid-2 {
     display: grid;
     gap: 22px;
     grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
   }
   
-  /* CARD = FULL SCREEN SECTION */
+  /* CARD */
   section.card {
-    min-height: 100vh;   /* KEY FIX */
-    scroll-snap-align: start;
-  
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
   
-    padding: 22px;
+    padding: 18px 18px 14px;
+  
+    display: flex;
+    flex-direction: column;
+  
+    overflow: hidden;
   
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -125,38 +124,43 @@
     background: var(--card-hover);
   }
   
-  /* FULL WIDTH */
+  /* FULL WIDTH CARDS */
   .card.wide {
-    min-height: 100vh;
+    grid-column: 1 / -1;
   }
   
   /* TITLES */
   section.card h2 {
-    margin: 0 0 12px;
+    margin: 4px 0 10px;
     font-size: 20px;
     color: var(--accent);
-  }
-  
-  /* TEXT */
-  p.context {
-    margin-top: 12px;
-    color: var(--muted);
-    font-size: 14px;
+    letter-spacing: -0.3px;
   }
   
   /* FIGURE */
   figure {
-    margin: 10px 0 0;
+    margin: 8px 0 0;
   }
   
+  /* caption (subtle, not academic) */
   figcaption {
     font-size: 12px;
     color: var(--muted);
-    opacity: 0.8;
     margin-top: 8px;
+    opacity: 0.8;
   }
   
-  /* VEGAS FIX */
+  /* CONTEXT TEXT (IMPORTANT FIX) */
+  p.context {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+  
+  /* VEGAS CHART FIX */
   .vega-embed svg {
     width: 100% !important;
     height: auto !important;
@@ -166,9 +170,11 @@
   footer {
     max-width: var(--maxw);
     margin: 0 auto;
-    padding: 40px 16px;
+    padding: 30px 16px 50px;
+  
     color: var(--muted);
     font-size: 13px;
+    opacity: 0.8;
   }
   
   /* LINKS */
