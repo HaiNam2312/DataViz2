@@ -4,292 +4,235 @@
   <meta charset="utf-8" />
   <title>Data Visualization 2 - FIT3179</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Vega libs -->
+
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
-  <!-- Minimal, readable styling -->
   <style>
   :root {
-    --bg1: #0b1020;
-    --bg2: #111827;
-  
-    --card: rgba(255,255,255,0.06);
-    --card-hover: rgba(255,255,255,0.09);
-  
-    --border: rgba(255,255,255,0.12);
-  
     --text: #e5e7eb;
     --muted: #94a3b8;
-  
     --accent: #60a5fa;
-    --good: #34d399;
-    --warn: #fbbf24;
-  
     --maxw: 1100px;
   }
-  
-  /* BASE */
+
   html, body {
     margin: 0;
     padding: 0;
-    min-height: 100%;
-  
     color: var(--text);
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-  
     background: #0b1020;
     scroll-behavior: smooth;
   }
-  
-  /* MAIN GRADIENT LAYER */
+
+  /* BACKGROUND GRADIENT */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: -1;
-  
+
     background:
-      radial-gradient(circle at 15% 20%, rgba(96,165,250,0.25), transparent 40%),
-      radial-gradient(circle at 80% 30%, rgba(168,85,247,0.20), transparent 45%),
-      radial-gradient(circle at 50% 80%, rgba(34,211,238,0.15), transparent 50%),
+      radial-gradient(circle at 15% 20%, rgba(96,165,250,0.22), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(168,85,247,0.18), transparent 45%),
+      radial-gradient(circle at 50% 80%, rgba(34,211,238,0.12), transparent 50%),
       linear-gradient(to bottom, #0b1020, #070a14);
   }
-  
+
   /* HEADER */
   header {
-    border-bottom: 1px solid var(--border);
-    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.25);
     backdrop-filter: blur(10px);
   }
-  
+
   header .wrap {
     max-width: var(--maxw);
     margin: 0 auto;
     padding: 28px 16px;
   }
-  
+
   h1 {
     margin: 0 0 6px;
     font-size: 34px;
     letter-spacing: -0.5px;
   }
-  
+
   .sub {
     margin: 0;
     color: var(--muted);
   }
-  
-  /* MAIN LAYOUT */
+
+  /* MAIN */
   main {
     max-width: var(--maxw);
     margin: 0 auto;
     padding: 24px 16px;
-  
+
     display: grid;
-    gap: 22px;
+    gap: 60px;
   }
-  
+
+  /* SECTION = REPORT BLOCK */
+  section.card {
+    padding: 0;
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 20px;
+    color: var(--accent);
+  }
+
+  p.context {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  figure {
+    margin: 10px 0 0;
+  }
+
+  figcaption {
+    font-size: 12px;
+    color: var(--muted);
+    opacity: 0.8;
+    margin-top: 8px;
+  }
+
   /* GRID */
   .grid-2 {
     display: grid;
     gap: 22px;
     grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
   }
-  
-  /* CARD */
-  section.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-  
-    padding: 18px 18px 14px;
-  
-    display: flex;
-    flex-direction: column;
-  
-    overflow: hidden;
-  
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  
-    transition: transform 0.2s ease, background 0.2s ease;
-  }
-  
-  section.card:hover {
-    transform: translateY(-4px);
-    background: var(--card-hover);
-  }
-  
-  /* FULL WIDTH CARDS */
-  .card.wide {
-    grid-column: 1 / -1;
-  }
-  
-  /* TITLES */
-  section.card h2 {
-    margin: 4px 0 10px;
-    font-size: 20px;
-    color: var(--accent);
-    letter-spacing: -0.3px;
-  }
-  
-  /* FIGURE */
-  figure {
-    margin: 8px 0 0;
-  }
-  
-  /* caption (subtle, not academic) */
-  figcaption {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 8px;
-    opacity: 0.8;
-  }
-  
-  /* CONTEXT TEXT (IMPORTANT FIX) */
-  p.context {
-    margin: 12px 0 0;
-    color: var(--muted);
-    font-size: 14px;
-  
-    overflow-wrap: anywhere;
-    hyphens: auto;
-  }
-  
-  /* VEGAS CHART FIX */
+
+  /* VEGAS */
   .vega-embed svg {
     width: 100% !important;
     height: auto !important;
   }
-  
+
   /* FOOTER */
   footer {
     max-width: var(--maxw);
     margin: 0 auto;
-    padding: 30px 16px 50px;
-  
+    padding: 40px 16px;
     color: var(--muted);
     font-size: 13px;
-    opacity: 0.8;
   }
-  
-  /* LINKS */
-  a {
-    color: var(--accent);
-    text-decoration: none;
+
+  /* SCROLL TRACKER */
+  .scroll-track {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
-  
-  a:hover {
-    text-decoration: underline;
+
+  .scroll-track span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transition: 0.2s;
   }
+
+  .scroll-track span.active {
+    background: var(--accent);
+    transform: scale(1.4);
+  }
+
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="wrap">
-      <h1>Study Engagement & Gender in Australia</h1>
-      <p class="sub">Exploring participation by sex, age, state and field of study. Short takeaways under each chart guide the story.</p>
-    </div>
-  </header>
 
-  <main>
+<div class="scroll-track">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span>
+</div>
 
-    <!-- 1. Australia overview by sex -->
-    <section class="card">
-      <h2>Overall study engagement by sex (Australia)</h2>
-      <figure>
-        <div id="aesex"></div>
-        <figcaption>National totals. Hover for exact values.</figcaption>
-      </figure>
-      <p class="context">Females study more than males at the national level. This baseline pattern appears again in most breakdowns below; the gap size then shifts depending on age, location and field of study.</p>
-    </section>
+<header>
+  <div class="wrap">
+    <h1>Study Engagement & Gender in Australia</h1>
+    <p class="sub">Exploring participation by sex, age, state and field of study.</p>
+  </div>
+</header>
 
-    <!-- 2. Age × sex -->
-    <section class="card">
-      <h2>Participation by age group and sex</h2>
-      <figure>
-        <div id="aeasex"></div>
-        <figcaption>Each point/segment represents an age band by sex.</figcaption>
-      </figure>
-      <p class="context">The difference isn’t uniform across ages. Participation is highest in study-intensive years (15–24), where female rates typically lead; later ages narrow the gap slightly, suggesting re-entry and upskilling, but females commonly remain ahead.</p>
-    </section>
+<main>
 
-    <!-- 3 & 4: State comparisons -->
-    <div class="grid-2">
-      <section class="card wide">
-        <h2>State gaps: Male vs Female (dumbbell)</h2>
-        <figure>
-          <div id="dumbell"></div>
-          <figcaption>Longer lines indicate larger gaps.</figcaption>
-        </figure>
-        <p class="context">All states show female &gt; male participation. The gap is largest in Queensland (+2.7% ; 13.8% ♂ vs 16.5% ♀) and smallest in the Northern Territory (+0.7%). ACT sits at the top for both sexes (≈16.7% ♂; 19.1% ♀), while Tasmania is lowest (≈12.1% ♂; 14.5% ♀).</p>
-      </section>
+  <section class="card">
+    <h2>Overall study engagement by sex</h2>
+    <div id="aesex"></div>
+    <p class="context">Females study more than males at the national level...</p>
+  </section>
 
-      <!-- AU choropleth: FULL-WIDTH CARD -->
-      <section class="card wide">
-        <h2>Choropleth: study engagement by state (female)</h2>
-        <figure>
-          <div id="sssc"></div>
-          <figcaption>Dark = higher participation. Hover for details.</figcaption>
-        </figure>
-        <p class="context">Female participation concentrates in the ACT (~19.1%), followed by NSW/VIC/WA (~17–18%). Queensland and the NT sit mid-pack, and Tasmania is lowest (~14.5%). The spatial pattern aligns with the state gaps above.</p>
-      </section>
-    </div>
+  <section class="card">
+    <h2>Participation by age group and sex</h2>
+    <div id="aeasex"></div>
+    <p class="context">Participation is highest in 15–24 age group...</p>
+  </section>
 
-    <!-- 5. Field of study split -->
-    <section class="card">
-      <h2>Field of study by sex</h2>
-      <figure>
-        <div id="field"></div>
-      </figure>
-      <p class="context">Field choice drives the sharpest splits. Engineering (20.0% ♂ vs 3.1% ♀) and IT (8.6% ♂ vs 2.3% ♀) skew male; Health (21.0% ♀ vs 8.2% ♂) and Education (11.0% ♀ vs 3.9% ♂) skew female. Management &amp; Commerce sits near parity (17.9% ♂; 17.6% ♀), and Agriculture is balanced (1.7% vs 1.7%).</p>
-    </section>
+  <section class="card">
+    <h2>State gaps: Male vs Female</h2>
+    <div id="dumbell"></div>
+    <p class="context">All states show female &gt; male participation...</p>
+  </section>
 
-    <!-- 6 & 7: Global context -->
-    <div class="grid-2">
-      <!-- GGI WORLD MAP: FULL-WIDTH CARD -->
-      <section class="card wide">
-        <h2>Global Gender Gap Index </h2>
-        <figure>
-          <div id="ggi"></div>
-          <figcaption>Composite index—contextual, not directly comparable to participation rates.</figcaption>
-        </figure>
-        <p class="context">Countries with narrower gender gaps in education and the economy tend to show more balanced study pipelines. Australia performs well overall, yet the field-level splits above show where progress is uneven.</p>
-      </section>
+  <section class="card">
+    <h2>Choropleth: study engagement by state</h2>
+    <div id="sssc"></div>
+    <p class="context">Female participation concentrates in ACT...</p>
+  </section>
 
-      <section class="card wide">
-        <h2>Women in STEM </h2>
-        <figure>
-          <div id="wis"></div>
-          <figcaption>Share of women in STEM areas (selected year).</figcaption>
-        </figure>
-        <p class="context">STEM remains the pinch point. The lower female share mirrors the field chart: IT and Engineering are male-leaning, while Health and Education are female-leaning. Strengthening STEM pathways is the lever most likely to narrow the overall gap.</p>
-      </section>
-    </div>
+  <section class="card">
+    <h2>Field of study by sex</h2>
+    <div id="field"></div>
+  </section>
 
-  </main>
+  <section class="card">
+    <h2>Global Gender Gap Index</h2>
+    <div id="ggi"></div>
+  </section>
 
-  <footer>
-    <p><strong>Data & Methods.</strong> Australian participation data from your curated CSVs (see repo). Global charts reference public sources linked in each spec. Rates shown are percentages; minor rounding may occur. All visuals built with Vega-Lite.</p>
-    <p><strong>Sources.</strong> See JSON specs in the repository for links to original datasets. Built for FIT3179 – Data Visualisation 2.</p>
-  </footer>
+  <section class="card">
+    <h2>Women in STEM</h2>
+    <div id="wis"></div>
+  </section>
 
-  <script>
-    vegaEmbed("#aesex", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/au_engage_sex.json", { mode: "vega-lite", renderer: "svg", actions: false }).catch(console.error);
-    vegaEmbed("#aeasex", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/au_engage_age_sex.json", { mode: "vega-lite", renderer: "svg", actions: false }).catch(console.error);
-    vegaEmbed("#dumbell", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/dumbell_study_state.json", { mode: "vega-lite", renderer: "svg", actions: false }).catch(console.error);
-    vegaEmbed("#field", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/field_sex.json", { mode: "vega-lite", renderer: "svg", actions: false }).catch(console.error);
-    vegaEmbed("#wis", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/women_in_stem_2020.json", { mode: "vega-lite", renderer: "svg", actions: false }).catch(console.error);
+</main>
 
-    vegaEmbed("#sssc", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/study_sex_state_choro_f.json",
-      { mode: "vega-lite", renderer: "svg", actions: false }).catch(console.error);
+<footer>
+  Data Visualisation Project – FIT3179
+</footer>
 
-    vegaEmbed("#ggi", "https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/gender_gap_index_wwmap.json",
-      { mode: "vega-lite", renderer: "svg", actions: false }).catch(console.error);
-  </script>
+<script>
+vegaEmbed("#aesex","https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/au_engage_sex.json",{actions:false});
+vegaEmbed("#aeasex","https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/au_engage_age_sex.json",{actions:false});
+vegaEmbed("#dumbell","https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/dumbell_study_state.json",{actions:false});
+vegaEmbed("#field","https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/field_sex.json",{actions:false});
+vegaEmbed("#wis","https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/women_in_stem_2020.json",{actions:false});
+vegaEmbed("#sssc","https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/study_sex_state_choro_f.json",{actions:false});
+vegaEmbed("#ggi","https://raw.githubusercontent.com/HaiNam2312/DataViz2/main/js/gender_gap_index_wwmap.json",{actions:false});
+
+/* scroll tracker */
+const sections = document.querySelectorAll("section.card");
+const dots = document.querySelectorAll(".scroll-track span");
+
+window.addEventListener("scroll", () => {
+  let i = sections.length;
+  while (--i && window.scrollY + 150 < sections[i].offsetTop) {}
+  dots.forEach(d => d.classList.remove("active"));
+  if (dots[i]) dots[i].classList.add("active");
+});
+</script>
+
 </body>
 </html>
